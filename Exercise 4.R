@@ -1,5 +1,6 @@
 ##### Normally kept in the view folder, probably titled greeting. #####
 library(shiny)
+library(bslib)
 
 greeting_UI <- function(id, label) {
   ns <- NS(id)
@@ -9,6 +10,7 @@ greeting_UI <- function(id, label) {
 
     # Make an action button that will delay action until it's hit
     actionButton(ns("submit_btn"), "Submit")
+    # textOutput(ns('greeting'))
   )
 }
 
@@ -38,18 +40,17 @@ greeting_Server <- function(id) {
 
 ###### Normally kept in main.R. #####
 # This is our "top level" app.
-ui <- fluidPage(
-  tabsetPanel(
-    tabPanel("Panel 1",
-      greeting_UI("name_module", "Enter your name:"),
-      greeting_Output("name_module2")
-    ), 
-    tabPanel("Panel 2",
-      greeting_UI("name_module2", "Who are you?"),
+ui <- bslib::page_fillable(
+  bslib::page_sidebar(
+    sidebar = sidebar(greeting_UI("name_module", "Enter your name:")),
       greeting_Output("name_module")
-
-    )
   )
+    # tabPanel("Panel 2",
+    #   greeting_UI("name_module2", "Who are you?"),
+    #   greeting_Output("name_module2")
+
+    # )
+  
 )
 
 server <- function(input, output, session) {
